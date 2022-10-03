@@ -22,47 +22,17 @@ public class UserController implements ActionListener {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        button = new JButton();
-        button.setText("Create client");
-        button.setPreferredSize(new Dimension(250, 40));
-        panel.add(button);
-        button.setBackground(Color.ORANGE);
-        button.addActionListener(this);
+        button = createButton("Create Client",panel);
 
-        button1 = new JButton();
-        button1.setText("Update client");
-        button1.setPreferredSize(new Dimension(250, 40));
-        panel.add(button1);
-        button1.setBackground(Color.ORANGE);
-        button1.addActionListener(this);
+        button1 = createButton("Update Client",panel);
 
-        button2 = new JButton();
-        button2.setText("View all Hotels");
-        button2.setPreferredSize(new Dimension(250, 40));
-        panel.add(button2);
-        button2.setBackground(Color.ORANGE);
-        button2.addActionListener(this);
+        button2 = createButton("View All Hotels",panel);
 
-        button3 = new JButton();
-        button3.setText("Create Booking");
-        button3.setPreferredSize(new Dimension(250, 40));
-        panel.add(button3);
-        button3.setBackground(Color.ORANGE);
-        button3.addActionListener(this);
+        button3 = createButton("Create Booking",panel);
 
-        button4 = new JButton();
-        button4.setText("Update Booking");
-        button4.setPreferredSize(new Dimension(250, 40));
-        panel.add(button4);
-        button4.setBackground(Color.ORANGE);
-        button4.addActionListener(this);
+        button4 = createButton("Update Booking",panel);
 
-        button5 = new JButton();
-        button5.setText("EXIT");
-        button5.setPreferredSize(new Dimension(250, 40));
-        panel.add(button5);
-        button5.setBackground(Color.ORANGE);
-        button5.addActionListener(this);
+        button5 = createButton("EXIT",panel);
 
         frame.add(panel);
         panel.setBackground(Color.GRAY);
@@ -93,5 +63,13 @@ public class UserController implements ActionListener {
         if (e.getSource() == button5){
             System.exit(0);
         }
+    }
+    private JButton createButton (String buttonName,JPanel panel){
+        JButton myButton = new JButton(buttonName);
+        myButton.setPreferredSize(new Dimension(210, 40));
+        panel.add(myButton);
+        myButton.setBackground(Color.GRAY);
+        myButton.addActionListener(this);
+        return myButton;
     }
 }

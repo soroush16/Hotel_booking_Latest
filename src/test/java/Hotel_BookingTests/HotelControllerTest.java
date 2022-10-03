@@ -30,7 +30,7 @@ public class HotelControllerTest {
     @Test
     @Order(1)
     void testMakeNewHotel() {
-        Hotel hotel = new Hotel(1L, "Kolm Kuningat", "Paide", 50, 79.0);
+        Hotel hotel = new Hotel(1L, "Radisson", "Tallinn,Livallaia", 50, 79.0);
         hotelRepository.createHotelToDB(hotel);
 
         ArgumentCaptor<Hotel> myHotel = ArgumentCaptor.forClass(Hotel.class);
@@ -44,7 +44,7 @@ public class HotelControllerTest {
     @Test
     @Order(2)
     void testUpdateHotel() {
-        Hotel hotel = new Hotel(2L, "Kolm Kuningat", "Paide", 50, 79.0);
+        Hotel hotel = new Hotel(2L, "Hilton", "Paide", 50, 79.0);
         hotel.setNumberOfRooms(45);
         hotel.setPrice(69.0);
         hotelRepository.updateHotelFromDB(hotel);
@@ -62,7 +62,7 @@ public class HotelControllerTest {
     @Test
     @Order(3)
     void testDeleteHotel() {
-        Hotel hotel = new Hotel(2L, "Kolm Kuningat", "Paide", 50, 79.0);
+        Hotel hotel = new Hotel(2L, "Radisson", "Tallinn, livallaia", 50, 79.0);
         hotelController.deleteHotel();
         verify(hotelRepository).deleteHotelFromDB(2L);
 

@@ -114,7 +114,7 @@ public class BookingRepository {
             if (booking != null) {
                 JOptionPane.showMessageDialog(null, booking.toString());
             } else {
-                JOptionPane.showMessageDialog(null, "Sorry, but we don't have booking with this id");
+                JOptionPane.showMessageDialog(null, "Sorry, we don't have booking with this id");
 
             }
             transaction.commit();
