@@ -1,6 +1,5 @@
-package Hotel_BookingTests;
+package controller;
 
-import controller.HotelController;
 import model.Hotel;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +11,7 @@ import repository.HotelRepository;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 
 
@@ -30,14 +30,12 @@ public class HotelControllerTest {
     @Test
     @Order(1)
     void testMakeNewHotel() {
-        Hotel hotel = new Hotel(1L, "Radisson", "Tallinn,Livallaia", 50, 79.0);
-        hotelRepository.createHotelToDB(hotel);
+        Hotel hotel = hotelController.makeNewHotel();
+        ArgumentCaptor<Hotel> argumentCapture = ArgumentCaptor.forClass(Hotel.class);
 
-        ArgumentCaptor<Hotel> myHotel = ArgumentCaptor.forClass(Hotel.class);
+        verify(hotelRepository).createHotelToDB(argumentCapture.capture());
 
-        verify(hotelRepository).createHotelToDB(myHotel.capture());
-
-        Hotel capturedHotel = myHotel.getValue();
+        Hotel capturedHotel = argumentCapture.getValue();
         Assertions.assertEquals(capturedHotel, hotel);
     }
 
@@ -62,16 +60,19 @@ public class HotelControllerTest {
     @Test
     @Order(3)
     void testDeleteHotel() {
-        Hotel hotel = new Hotel(2L, "Radisson", "Tallinn, livallaia", 50, 79.0);
+
         hotelController.deleteHotel();
-        verify(hotelRepository).deleteHotelFromDB(2L);
+        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(hotelRepository).deleteHotelFromDB(argumentCaptor.capture());
+        Long captured = argumentCaptor.getValue();
+        Assertions.assertEquals(2l,captured);
 
     }
 
     @Test
     @Order(4)
     void testGetAllHotels() {
-        List<Hotel> hotels = hotelRepository.getAllHotelsFromDB();
+        List<Hotel> hotels = hotelController.getAllHotels();
         assertThat(hotels).isNotNull();
 
     }
@@ -79,9 +80,13 @@ public class HotelControllerTest {
     @Test
     @Order(5)
     void testFindHotelById() {
-        Hotel hotel = new Hotel(2L, "Kolm Kuningat", "Paide", 50, 79.0);
+
         hotelController.findHotelById();
-        verify(hotelRepository).findHotelFromDBById(2L);
+        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(hotelRepository).findHotelFromDBById(argumentCaptor.capture());
+        Long captured = argumentCaptor.getValue();
+        assertThat(captured).isEqualTo(3l);
+
     }
 
 }

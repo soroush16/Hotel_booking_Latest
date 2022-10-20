@@ -62,14 +62,14 @@ public class BookingRepository {
         return booking;
     }
 
-    public void updateBookingFromDB(Bookings bookingId) {
+    public void updateBookingFromDB(Bookings booking) {
         Session session = factory.openSession();
         Transaction transaction = null;
 
         try {
             transaction = session.beginTransaction();
-            Bookings foundBooking = session.find(Bookings.class, bookingId);
-            session.merge(foundBooking); //Makes the update
+            Bookings foundBooking = session.find(Bookings.class, booking.getId());
+            session.merge(booking); //Makes the update
             transaction.commit();
 
         } catch (Exception e) {

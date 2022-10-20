@@ -21,8 +21,9 @@ public class ClientController {
         client.setFirstName(this.getUserInput("Please enter your name: "));
         client.setLastName(this.getUserInput("Please enter your last name: "));
         client.setAge(Integer.parseInt(this.getUserInput("Please enter your age: ")));
+        clientRepository.createClientToDB(client);
 
-        return clientRepository.createClientToDB(client);
+        return client;
     }
 
     public void deleteClient() {
@@ -65,7 +66,7 @@ public class ClientController {
         clientRepository.findClientByPersonalIdCode(chosenId);
     }
 
-    public void viewAllMyClients() {
+    public List<Client> viewAllMyClients() {
         String myText;
         List<Client> myClients;
         myClients = clientRepository.showAllMyClientsFromDB();
@@ -76,7 +77,8 @@ public class ClientController {
         myText = builder.toString();
 
         JOptionPane.showMessageDialog(null, myText);
-//        System.out.println(clientRepository.showAllMyClientsFromDB());
+        return myClients;
+
     }
 
     private String getUserInput(String message) {

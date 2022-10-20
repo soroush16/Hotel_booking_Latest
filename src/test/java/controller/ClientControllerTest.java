@@ -1,6 +1,5 @@
-package Hotel_BookingTests;
+package controller;
 
-import controller.ClientController;
 import model.Client;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import repository.ClientRepository;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
@@ -32,21 +33,23 @@ class ClientControllerTest {
     @Order(1)
     void testCreateClient() {
 
-        Client client = new Client(1l,1222l,"hasan","karim",30);
-        clientRepositoryMock.createClientToDB(client);
-        ArgumentCaptor<Client> myClient = ArgumentCaptor.forClass(Client.class);
-        verify(clientRepositoryMock).createClientToDB(myClient.capture());
-        Client client1 = myClient.getValue();
-        assertThat(client).isEqualTo(client1);
-        Assertions.assertEquals(client,client1);
+        Client client = clientController.createClient();
+        ArgumentCaptor<Client> argumentCaptor = ArgumentCaptor.forClass(Client.class);
+        verify(clientRepositoryMock).createClientToDB(argumentCaptor.capture());
+        Client capturedClient =argumentCaptor.getValue();
+        Assertions.assertEquals(client,capturedClient);
     }
 
     @Test
     @Order(2)
     void testDeleteClient() {
-        Client client = new Client(2l,1234l,"david","anderson",30);
+
         clientController.deleteClient();
-        Mockito.verify(clientRepositoryMock).deleteClientFromDB(1234l);
+        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(clientRepositoryMock).deleteClientFromDB(argumentCaptor.capture());
+        Long capturedId = argumentCaptor.getValue();
+        Assertions.assertEquals(12l,capturedId);
+
     }
 
     @Test
@@ -70,15 +73,17 @@ class ClientControllerTest {
     @Test
     @Order(4)
     void testFindClientByPersonalId() {
-        Client client = new Client(3l,1235l,"james","andra",20);
         clientController.findClientByPersonalId();
-        verify(clientRepositoryMock).findClientByPersonalIdCode(1235l);
+        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(clientRepositoryMock).findClientByPersonalIdCode(argumentCaptor.capture());
+        Long captured = argumentCaptor.getValue();
+        Assertions.assertEquals(1234,captured);
     }
 
     @Test
     @Order(5)
     void viewAllMyClients() {
-        clientController.viewAllMyClients();
-        verify(clientRepositoryMock).showAllMyClientsFromDB();
+        List<Client> allClients = clientController.viewAllMyClients();
+        assertThat(allClients).isNotNull();
     }
 }

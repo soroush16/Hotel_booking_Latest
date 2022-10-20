@@ -44,7 +44,7 @@ public class BookingController {
         return foundClient;
     }
 
-    public void createNewBooking() {
+    public Bookings createNewBooking() {
         Bookings booking = new Bookings();
         Long userChoice = Long.valueOf(this.getUserInput("Please choose your hotel from \"View all Hotels\" button"));
         Hotel hotel = hotelRepository.findHotelFromDBById(userChoice);
@@ -62,6 +62,7 @@ public class BookingController {
         } else {
             JOptionPane.showMessageDialog(null, "Sorry this hotel does not have available room");
         }
+        return  booking;
 
 
     }
@@ -72,8 +73,9 @@ public class BookingController {
 
     }
 
-    public void updateBooking() {
-        Long chosenId = (long) Integer.parseInt(this.getUserInput("Please enter the Booking id to be updated"));
+    public Bookings updateBooking() {
+
+        long chosenId = (long) Integer.parseInt(this.getUserInput("Please enter the Booking id to be updated"));
         Bookings updatedBooking = bookingRepository.findBookingFromDBById(chosenId);
         if (updatedBooking == null){
 
@@ -128,10 +130,11 @@ public class BookingController {
             }
 
         }
+        return updatedBooking;
 
     }
 
-    public void viewAllMyBookings() {
+    public List<Bookings> viewAllMyBookings() {
         String myText;
         List<Bookings> myBookings;
         myBookings = bookingRepository.showAllMyBookingsFromDB();
@@ -142,7 +145,7 @@ public class BookingController {
         myText = builder.toString();
 
         JOptionPane.showMessageDialog(null, myText);
-//        System.out.println(bookingRepository.showAllMyBookingsFromDB());
+        return myBookings;
     }
 
     public void findBookingById() {

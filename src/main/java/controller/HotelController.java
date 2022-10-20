@@ -13,13 +13,14 @@ import java.util.List;
 public class HotelController {
      HotelRepository hotelRepository = new HotelRepository();
 
-    public void makeNewHotel (){
+    public Hotel makeNewHotel (){
         Hotel hotel = new Hotel();
         hotel.setHotelName(this.getUserInput("Please enter Hotel name: "));
         hotel.setAddress(this.getUserInput("Please enter Hotel address: "));
         hotel.setNumberOfRooms(Integer.parseInt(this.getUserInput("Please enter number how many rooms the hotel contains: ")));
         hotel.setPrice(Double.valueOf(this.getUserInput("Enter the price for one night")));
         hotelRepository.createHotelToDB(hotel);
+        return hotel;
     }
 
     public void updateHotel (){
@@ -55,7 +56,7 @@ public class HotelController {
         hotelRepository.deleteHotelFromDB(chosenId);
     }
 
-    public void getAllHotels() {
+    public List<Hotel> getAllHotels() {
         String myText;
         List<Hotel> myHotels;
         myHotels = hotelRepository.getAllHotelsFromDB();
@@ -66,6 +67,7 @@ public class HotelController {
         myText = builder.toString();
 
         JOptionPane.showMessageDialog(null, myText);
+        return myHotels;
 
     }
     public void findHotelById() {
