@@ -134,15 +134,15 @@ public class BookingRepository {
         Session session = factory.openSession();
         Transaction transaction = null;
         List<Bookings> booking = null;
-        Client client = null;
+        List<Client> client = null;
         ClientRepository clientRepository = new ClientRepository();
         try {
             transaction = session.beginTransaction();
             client = clientRepository.findClientByPersonalIdCode(id);
             Query<Bookings> query = session.createQuery("FROM bookings WHERE client =:client", Bookings.class);
-            query.setParameter("client", client);
+            query.setParameter("client", client.get(0));
             booking = query.getResultList();
-            //booking =session.createQuery("FROM bookings WHERE client ="+client,Bookings.class).getSingleResultOrNull();
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

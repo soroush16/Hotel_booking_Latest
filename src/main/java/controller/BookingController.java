@@ -33,15 +33,17 @@ public class BookingController {
 
     private Client verifyClient() {
         Long userIdCode = Long.valueOf(this.getUserInput("Please enter your personal ID code"));
-        Client foundClient = clientRepository.findClientByPersonalIdCode(userIdCode);
+        List<Client> foundClient = clientRepository.findClientByPersonalIdCode(userIdCode);
+        Client client = null;
         if (foundClient == null) {
-            foundClient = clientController.createClient();
+            client = clientController.createClient();
         }
-        if (foundClient.getAge() < 18) {
+        client = foundClient.get(0);
+        if (client.getAge() < 18) {
             JOptionPane.showMessageDialog(null, "Sorry, but you have to be 18 years old to book a room");
             this.createNewBooking();
         }
-        return foundClient;
+        return client;
     }
 
     public Bookings createNewBooking() {
@@ -103,11 +105,13 @@ public class BookingController {
                     break;
                 case 3:
                     Long myClientId = Long.valueOf(this.getUserInput("Please enter new client personal id:"));
-                    Client foundClient = clientRepository.findClientByPersonalIdCode(myClientId);
+                    List<Client> foundClient = clientRepository.findClientByPersonalIdCode(myClientId);
+                    Client client = null;
                     if (foundClient == null) {
-                        foundClient = clientController.createClient();
+                        client = clientController.createClient();
                     }
-                    updatedBooking.setClient(foundClient);
+                    client = foundClient.get(0);
+                    updatedBooking.setClient(client);
                     bookingRepository.updateBookingFromDB(updatedBooking);
                     break;
                 case 4:

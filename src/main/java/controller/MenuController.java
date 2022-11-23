@@ -15,26 +15,11 @@ public class MenuController implements ActionListener {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        button = new JButton();
-        button.setText("Client");
-        button.setPreferredSize(new Dimension(300, 40));
-        panel.add(button);
-        button.setBackground(Color.ORANGE);
-        button.addActionListener(this);
+        button = createButton("Client", panel);
 
-        button1 = new JButton();
-        button1.setText("Administrator");
-        button1.setPreferredSize(new Dimension(300, 40));
-        panel.add(button1);
-        button1.setBackground(Color.ORANGE);
-        button1.addActionListener(this);
+        button1 = createButton("Adminstrator",panel);
 
-        button2 = new JButton();
-        button2.setText("EXIT");
-        button2.setPreferredSize(new Dimension(300, 40));
-        panel.add(button2);
-        button2.setBackground(Color.ORANGE);
-        button2.addActionListener(this);
+        button2 = createButton("Exit",panel);
 
         frame.add(panel);
         panel.setBackground(Color.GRAY);
@@ -56,5 +41,15 @@ public class MenuController implements ActionListener {
         if (e.getSource() == button2){
            System.exit(0);
         }
+    }
+
+
+    private JButton createButton (String buttonName,JPanel panel){
+        JButton myButton = new JButton(buttonName);
+        myButton.setPreferredSize(new Dimension(300, 40));
+        panel.add(myButton);
+        myButton.setBackground(Color.GRAY);
+        myButton.addActionListener(this);
+        return myButton;
     }
 }

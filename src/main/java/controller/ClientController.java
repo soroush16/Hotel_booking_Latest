@@ -17,46 +17,59 @@ public class ClientController {
 
     public Client createClient() {
         Client client = new Client();
-        client.setPersonalId(Long.parseLong(this.getUserInput("Please enter your personal id code: ")));
-        client.setFirstName(this.getUserInput("Please enter your name: "));
-        client.setLastName(this.getUserInput("Please enter your last name: "));
-        client.setAge(Integer.parseInt(this.getUserInput("Please enter your age: ")));
-        clientRepository.createClientToDB(client);
+        Long userResponse = Long.parseLong(this.getUserInput("Please enter your personal id code"));
+        List<Client> clientsFound = clientRepository.findClientByPersonalIdCode(userResponse);
+        if(clientsFound.isEmpty()){
+
+            client.setPersonalId(userResponse);
+            client.setFirstName(this.getUserInput("Please enter your name: "));
+            client.setLastName(this.getUserInput("Please enter your last name: "));
+            client.setAge(Integer.parseInt(this.getUserInput("Please enter your age: ")));
+            clientRepository.createClientToDB(client);
+        }
+        else{
+            client= clientsFound.get(0);
+
+
+        }
 
         return client;
     }
 
     public void deleteClient() {
         Long chosenId = Long.parseLong(this.getUserInput("Please enter the client personal id code to be removed"));
-        Client client = clientRepository.deleteClientFromDB(chosenId);
+        clientRepository.deleteClientFromDB(chosenId);
 
     }
 
     public void updateClient() {
         Long chosenId = (long) Integer.parseInt(this.getUserInput("Please enter the client personal id from database to be updated"));
-        Client foundClient = clientRepository.findClientByPersonalIdCode(chosenId);
+        List<Client> foundClient = clientRepository.findClientByPersonalIdCode(chosenId);
         if (foundClient == null){
 
         }else {
-            int userChoice = Integer.parseInt(JOptionPane.showInputDialog("Please specify what info you want to update:\n"
-                    + " for personal ID enter 1\n"
-                    + " for firstname enter 2\n"
-                    + " for lastname enter 3\n"
-                    + " for age enter 4"));
-            if (userChoice == 1) {
-                long personalIdCode = Long.parseLong(this.getUserInput("Please enter new personal ID code: "));
-                foundClient.setPersonalId(personalIdCode);
-            } else if (userChoice == 2) {
-                foundClient.setFirstName(this.getUserInput("Please enter new firstname: "));
-            } else if (userChoice == 3) {
-                foundClient.setLastName(this.getUserInput("Please enter new lastname: "));
-            } else if (userChoice == 4) {
-                foundClient.setAge(Integer.parseInt(this.getUserInput("Please enter new age: ")));
-            } else {
-                JOptionPane.showMessageDialog(null, "Something went wrong!");
-                System.exit(0);
+            for(Client c: foundClient){
+                int userChoice = Integer.parseInt(JOptionPane.showInputDialog("Please specify what info you want to update:\n"
+                        + " for personal ID enter 1\n"
+                        + " for firstname enter 2\n"
+                        + " for lastname enter 3\n"
+                        + " for age enter 4"));
+                if (userChoice == 1) {
+                    long personalIdCode = Long.parseLong(this.getUserInput("Please enter new personal ID code: "));
+                    c.setPersonalId(personalIdCode);
+                } else if (userChoice == 2) {
+                    c.setFirstName(this.getUserInput("Please enter new firstname: "));
+                } else if (userChoice == 3) {
+                    c.setLastName(this.getUserInput("Please enter new lastname: "));
+                } else if (userChoice == 4) {
+                    c.setAge(Integer.parseInt(this.getUserInput("Please enter new age: ")));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Something went wrong!");
+                    System.exit(0);
+                }
+                clientRepository.updateClientInfo(c);
             }
-            clientRepository.updateClientInfo(foundClient);
+
         }
 
     }

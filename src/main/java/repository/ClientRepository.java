@@ -33,10 +33,10 @@ public class ClientRepository {
         return client;
     }
 
-    public Client deleteClientFromDB(Long id) {
+    public List<Client> deleteClientFromDB(Long id) {
         Session session = factory.openSession();
         Transaction transaction = null;
-        Client client = null;
+        List<Client> client = null;
         List<Bookings> booking=null;
         BookingRepository bookingRepository = new BookingRepository();
         try {
@@ -45,9 +45,10 @@ public class ClientRepository {
             if(booking!= null){
                 booking.forEach(b->{bookingRepository.deleteBookingsFromDB(b.getId());});
             }
-            client = session.createQuery("FROM clients WHERE personalId = " + id, Client.class).getSingleResultOrNull();
+            client = session.createQuery("FROM clients WHERE personalId = " + id, Client.class).getResultList();
             if (client != null){
-                session.remove(client);
+                client.forEach(c->session.remove(c));
+                //session.remove(client);
                 JOptionPane.showMessageDialog(null, "Client deleted successfully!");
 
             }
@@ -85,16 +86,16 @@ public class ClientRepository {
         JOptionPane.showMessageDialog(null, "Client updated successfully!");
     }
 
-    public Client findClientByPersonalIdCode(Long id) {
+    public List<Client> findClientByPersonalIdCode(Long id) {
         Session session = factory.openSession();
         Transaction transaction = null;
-        Client client = null;
+        List<Client> client = null;
 
         try {
             transaction = session.beginTransaction();
-            client = session.createQuery("FROM clients WHERE personalId = " + id, Client.class).getSingleResultOrNull();
+            client = session.createQuery("FROM clients WHERE personalId = " + id, Client.class).getResultList();
             if (client != null) {
-                JOptionPane.showMessageDialog(null, client.toString());
+                JOptionPane.showMessageDialog(null, client.get(0));
             } else {
                 JOptionPane.showMessageDialog(null,"You don't have an account with us");
             }
